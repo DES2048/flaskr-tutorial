@@ -86,3 +86,15 @@ def get_user_by_id(id):
     user = db.execute("select * from user where id = ?", (id,)).fetchone()
 
     return user
+
+
+def get_posts_all():
+    db = get_db()
+
+    posts = db.execute(
+        "select p.id, title, body, created, author_id, username"
+        " from post p join user u ON p.author_id = u.id"
+        " order by created desc"
+    ).fetchall()
+
+    return posts
