@@ -99,7 +99,7 @@ def load_logged_in_user():
 
 
 # Декоратор для view по которым нужно проверять авторизацию
-def login_reqired(view):
+def login_required(view):
     @functools.wraps(view)
     def wrapped(**kwargs):
         if g.user is None:
