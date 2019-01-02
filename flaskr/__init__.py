@@ -31,6 +31,10 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    # настраиваем модуль db
+    from . import db
+    db.init_app(app)
+
     # Ну и созадим простой view И прицепим к нему роут
     @app.route("/hello")
     def hello():
