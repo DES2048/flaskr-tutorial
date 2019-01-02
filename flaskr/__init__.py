@@ -35,6 +35,12 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
+    # регаем blueprints
+    from . import auth
+    app.register_blueprint(auth.bp)
+
+
+
     # Ну и созадим простой view И прицепим к нему роут
     @app.route("/hello")
     def hello():

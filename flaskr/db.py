@@ -36,7 +36,7 @@ def get_db():
 
         g.db.row_factory = sqlite3.Row
 
-        return g.db
+    return g.db
 
 
 def close_db(e=None):
@@ -52,3 +52,37 @@ def close_db(e=None):
 def init_db_command():
     init_db()
     click.echo("Database initializated")
+
+# db helper functions
+
+
+# checking if user with given username exists
+def username_exist(username):
+    db = get_db()
+
+    return db.execute(
+        "select id from user where username = ?", (username,)
+    ).fetchone() is not None
+
+
+def add_user(username, password):
+    db = get_db()
+
+    db.execute("insert into user(username, password) values (?, ?)", (username, password))
+    db.commit()
+
+
+def get_user_by_name(username):
+    db = get_db()
+
+    user = db.execute("select * from user where username = ?", (username,)).fetchone()
+
+    return user
+
+
+def get_user_by_id(id):
+    db = get_db()
+
+    user = db.execute("select * from user where id = ?", (id,)).fetchone()
+
+    return user
