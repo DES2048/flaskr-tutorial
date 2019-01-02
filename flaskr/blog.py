@@ -5,7 +5,9 @@ from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 
-from flaskr.db import get_posts_all, add_post
+from flaskr.db import (
+    get_posts_all, add_post, get_post_by_id, update_post
+)
 
 from flaskr.auth import login_required
 
@@ -40,5 +42,44 @@ def create():
         flash(error)
 
     return render_template("blog/create.html")
+
+
+@bp.route("/update/<int:id>", methods=("GET", "POST"))
+@login_required
+def update(id):
+    post = get_post_by_id(id)
+
+    if post is None:
+        abort(404, "Post id {0} doesn't exist.".format(id))
+
+    if request.method == "POST":
+
+        if post["author_id"] != g.user["id"]:
+            abort(403, "Forbidden")
+
+        title = request.form["title"]
+        body = request.form["body"]
+
+        error = None
+
+        if not title:
+            error = "Title required"
+        elif not body:
+            error = "Post body required"
+
+        if error is not None:
+            flash(error)
+        else:
+            update_post(id, title, body)
+            return redirect(url_for("blog.index"))
+
+    return render_template("blog/update.html", post=post)
+
+
+@bp.route("/delete/<int:id>")
+@login_required
+def delete(id):
+    pass
+
 
 

@@ -109,3 +109,26 @@ def add_post(author_id, title, body):
     )
 
     db.commit()
+
+
+def get_post_by_id(id):
+    db = get_db()
+
+    post = db.execute(
+        "select p.id, title, body, created, author_id, username"
+        " from post p join user u ON p.author_id = u.id"
+        " where p.id = ?"
+        " order by created desc", (id,)
+    ).fetchone()
+
+    return post
+
+
+def update_post(post_id, title, body):
+    db = get_db()
+    db.execute(
+        'UPDATE post SET title = ?, body = ?'
+        ' WHERE id = ?',
+        (title, body, post_id)
+    )
+    db.commit()
