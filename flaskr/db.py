@@ -98,3 +98,14 @@ def get_posts_all():
     ).fetchall()
 
     return posts
+
+
+def add_post(author_id, title, body):
+    db = get_db()
+
+    db.execute(
+        "insert into post(author_id, title, body) values(?, ?, ?)",
+        (author_id, title, body)
+    )
+
+    db.commit()
