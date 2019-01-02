@@ -132,3 +132,10 @@ def update_post(post_id, title, body):
         (title, body, post_id)
     )
     db.commit()
+
+
+def delete_post(post_id):
+    db = get_db()
+
+    db.execute("DELETE FROM post where id = ?", (post_id,))
+    db.commit()
